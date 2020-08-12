@@ -1,3 +1,11 @@
 This file is used to record anything happened during development.
 Such as bugs, idea and notes.
 
+ABOUT MBR:
+	*When writing MBR file,the beginning of nasm code should be 07c0,because in the very first computer, the least required memory size is 32KB, the beginning is used by BIOS. 
+	Therefore, to remain as more as possible continuous memory space to OS, mbr file is put at the end of 32KB memory space.
+
+	*at the end of MBR file should be 55aa and I don't know why.
+	
+	*It turns out that you should implemented a proc call in nasm code and I don't know why.
+
