@@ -1,0 +1,14 @@
+this file is used to record the update of project
+
+2020/8/12
+Original mbr file
+* could print a string while boosting
+* written by nasm
+
+
+Makefile
+*create the .img file by .s file
+*path of .img file has been assigned in this file.
+ It will be automaticaly put in related bochs file.
+ Check bochs' initialise file to know more
+
