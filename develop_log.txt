@@ -9,3 +9,7 @@ ABOUT MBR:
 	
 	*It turns out that you should implemented a proc call in nasm code and I don't know why.
 
+ABOUT LONG JUMP BETWEEN BOOTSECTOR AND KERNAL:
+	*You should be very careful about segment and real address in memory.
+	*When you excute instruction as jump CS:IP, you should really know where to jump.
+	*I don't know why 2nd print in bootsector failed

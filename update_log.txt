@@ -12,3 +12,18 @@ Makefile
  It will be automaticaly put in related bochs file.
  Check bochs' initialise file to know more
 
+2020/8/13
+bootsect(original mbr file)
+* still print a string while boosting
+* successfully load OS into memory 0x8000
+* successfully transformed authority to the OS
+
+Makefile
+*put kernal in .img file
+
+kernal.s
+* when OS(process of kernal) is authorised, it now print a string
+
+TD list:
+	* find a way to write OS kernal by C programming language instead of nasm
+
