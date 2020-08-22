@@ -2,12 +2,22 @@ org 0x7c00
 
 mov ax, cs
 mov ds, ax
-mov es, ax
+mov ax, 0xb800
+mov es,ax
 call main
 
 ;main code
 ;display a string
 main:
+;set video mode to 03
+mov ax,0x0003
+int 10h
+
+;mov byte [ES:0x00],'N'
+;mov byte [ES:0x01],0x10
+;mov byte [ES:0x02],'A'
+;mov byte [ES:0x03],0x28
+
 ;clear the screen
 mov ah,07h
 mov al,0h
@@ -43,16 +53,16 @@ mov ax,0x0800
 mov es,ax	;load OS at seg 0x0800
 mov bx,0        ;es:bx points to where to load
 		;get more information from BIOS IVT
-mov ax,0204h	;read 4(ah)sectors
+mov ax,0218h	;read 4(ah)sectors
 
 int 13h
 
-jnc OS
+jnc Loader
 jmp read_disk
 
-OS:
-;read OS successsfully
-;authorise OS
+Loader:
+;read Loader and OS successsfully
+;authorise Loader
 
 mov ah,02h
 mov bh,0

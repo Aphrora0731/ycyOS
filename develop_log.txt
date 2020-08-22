@@ -9,7 +9,24 @@ ABOUT MBR:
 	
 	*It turns out that you should implemented a proc call in nasm code and I don't know why.
 
+	*BIOS magically saved 512 byte for MBR(boot) as data segemnt.It turns out in ycyOS.img, the binary code of loader.s is just behind signiture 0xaa55, but when the ycyOS.img is loaded by BIOS, loader.s begins at 0x8000.
+
+
 ABOUT LONG JUMP BETWEEN BOOTSECTOR AND KERNAL:
 	*You should be very careful about segment and real address in memory.
 	*When you excute instruction as jump CS:IP, you should really know where to jump.
 	*I don't know why 2nd print in bootsector failed
+
+ABOUT GDT&IDT&SEGMENT SELECTOR
+	*GDT(global descriptor table)is a table of information about segements,including size,start position and type.You have to load tell computer where to find it in memory by lgdt assembly instruction
+	*The first descriptor in GDT is not used.
+	*Index in selector means which position this descriptor is in table.
+	*The base in descriptor is phisical address without 4 bits shiftted like real mode did in segment register
+
+ABOUT VIDEO MEMORY
+	*0xb800 is segment address.The REAL start is 0xb8000.SHIT!
+
+
+
+
+
