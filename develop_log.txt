@@ -26,6 +26,10 @@ ABOUT GDT&IDT&SEGMENT SELECTOR
 ABOUT VIDEO MEMORY
 	*0xb800 is segment address.The REAL start is 0xb8000.SHIT!
 
+ABOUT MIXING ASSEMBLY AND C
+	*To passing argument,you should choose a calling convention before and obey it,in our case,cdecl.
+	*print-stack command is useful while debug in bochs.
+	*I specified stack segment before, not sure if it's necessary,but I believe an OS programmer should always take over his memory space.
 
 
 

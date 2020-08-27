@@ -1,14 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+extern int print(char* str,int len);
 
-int Cprint()
+int Cprint(int len)
 {
+	char *mark="This is a mark\0";	
+	print(mark,len);
 	return 0;
 }
 
-int main(int argc,char *argv[])
-{
-	printf("Welcom to ycyOS!\n");
-	return 0;
-}

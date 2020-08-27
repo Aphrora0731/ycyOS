@@ -1,0 +1,2 @@
+1.set a stack segment in GDT(with selector=0x20)
+2.pass parameters by stack to call C function

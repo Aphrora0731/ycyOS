@@ -12,6 +12,7 @@ Makefile
  It will be automaticaly put in related bochs file.
  Check bochs' initialise file to know more
 
+
 2020/8/13
 bootsect(original mbr file)
 * still print a string while boosting
@@ -26,4 +27,27 @@ kernal.s
 
 TD list:
 	* find a way to write OS kernal by C programming language instead of nasm
+(check)
+
+2020/8/27
+Makefile
+* When applying command objcopy to elf32 file, it keep only .text segment only, and data such as char* str="string" is kept in .rodata segment in default.
+ 	Therefore, you should use parameter -j .text -j .rodata to put data into .img file
+* You should specify instruction architechture with parameter.Such as follows:
+	-m32 in gcc command.
+	-m elf_i386 in ld command
+	-f elf32 in nasm command before lingking .c and .asm
+	
+	That's because our OS running in 32-bit protect mode
+	And when you apply-m32 in gcc, you've specified calling convention of your C compiler.
+	In this case,we agreed calling convention as cdecl,which uses stack to pass all parameters
+
+ycyOS.c
+* Declare a function int Cprint(int len),get argument from kernal.asm by stack
+* passing a pointer and a integer to assembly function print by stack(cdecl)
+
+kernal.asm
+* get argument from ycyOS.c by stack
+* The actual string is stored in .rodata segment,make sure it's copied by objcopy.
+
 
