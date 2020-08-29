@@ -27,6 +27,11 @@ stac_seg dw 0x07FF,0x7c00
 gdt_len equ $-null_seg
 
 
+
+idt_start:
+
+
+
 gdt_ptr dw  0x00FF
 	dd  0x00008050 ;by magic,do not change the file
 	

@@ -1,9 +1,15 @@
-extern int print(char* str,int len);
 
-int Cprint(int len)
+extern int print(char* str,int len);
+extern void clear_screen();
+int Cprint(char* mssg,int len)
 {
-	char *mark="This is a mark\0";	
-	print(mark,len);
+	print(mssg,len);
 	return 0;
 }
 
+void ycyOS(int status)
+{
+	clear_screen();
+	char* mssg = "Welcome to ycyOS!";
+	Cprint(mssg,status);
+}

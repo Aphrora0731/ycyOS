@@ -1,10 +1,13 @@
 BITS 32
 
 extern Cprint
+extern ycyOS
+
 
 section .text
 global _start
 global print
+global clear_screen
 _start:
 mov ax,0x10
 mov ds,ax
@@ -12,8 +15,8 @@ mov ds,ax
 mov ax,0x20
 mov ss,ax
 
-push 0x0e
-call Cprint
+push 0x10
+call ycyOS
 
 jmp $
 
@@ -53,4 +56,22 @@ pop edi
 leave
 ret
 
+clear_screen:
+push ebp
+mov ebp,esp
 
+push edi
+xor edi,edi
+mov eax,0x0018
+mov gs,eax
+
+mov ecx,0x7fff
+
+.loop:
+	mov byte [gs:edi],0x00
+	inc edi	
+	loop .loop
+pop edi
+
+leave
+ret
