@@ -2,8 +2,6 @@ org 0x7c00
 
 mov ax, cs
 mov ds, ax
-mov ax, 0xb800
-mov es,ax
 call main
 
 ;main code
@@ -53,7 +51,7 @@ mov ax,0x0800
 mov es,ax	;load OS at seg 0x0800
 mov bx,0        ;es:bx points to where to load
 		;get more information from BIOS IVT
-mov ax,0218h	;read 4(ah)sectors
+mov ax,0223h	;read 4(ah)sectors
 
 int 13h
 
@@ -63,29 +61,7 @@ jmp read_disk
 Loader:
 ;read Loader and OS successsfully
 ;authorise Loader
-
-mov ah,02h
-mov bh,0
-mov dh,5h
-mov dl,0h
-int 10h
-
-;print string
-mov ax,jmp_mssg
-mov bp,ax
-;load the start of mssg in bp for later print
-mov cx,jmp_len
-;load the length of the mssg
-mov ax,01301h
-;set print format
-mov bx,000dh
-mov dl,0
-;set cursor's position
-int 10h
-
 jmp 0x0800:0x0000
-
-ret
 
 mssg db "hello,ycy!"
 mssg_len equ $-mssg

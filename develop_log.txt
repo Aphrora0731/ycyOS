@@ -1,6 +1,11 @@
 This file is used to record anything happened during development.
 Such as bugs, idea and notes.
 
+ABOUT NAME:
+	*All struct prototype should be named as "StructPrototype"
+	*All function and variable should be named as "fuction_name" or "variable_name"
+
+
 ABOUT MBR:
 	*When writing MBR file,the beginning of nasm code should be 07c0,because in the very first computer, the least required memory size is 32KB, the beginning is used by BIOS. 
 	Therefore, to remain as more as possible continuous memory space to OS, mbr file is put at the end of 32KB memory space.
@@ -31,6 +36,31 @@ ABOUT MIXING ASSEMBLY AND C
 	*print-stack command is useful while debug in bochs.
 	*I specified stack segment before, not sure if it's necessary,but I believe an OS programmer should always take over his memory space.
 
+ABOUT interrupt
+	*remember sending EOI to 8259A.For now it's the best way to reset keyboard buffer
+	*File interrupt.h declare interrupt function.
+	 When user calling an intehandler(keyboard intterrupt,for example),kb_int() should enbble keyboard int by programming 8259a.
+	 Then waiting assembly function for keyboard,get a scancode,transform it into ascii and put it into keyboard buffer
+	
 
+ABOUT KEYBOARD INTERRUPT
+	*C keyboard-int handler provokes an int and manage keyboard input buffer
+	*A process won't need keyboard input before itslef.So keyboard int should only be enabled when we really need it.
 
-
+A BUG ABOUT CALL AND STACK DURING:
+	*interrupt handler int21h calls kb_int and passing parameter by stack (push)
+	*however, after kb_int returns, it did not clean the stack
+	*another wierd thing.If you push ax in 32-bit (push a word on double word wide stack),it won't clean the exited stack top, or become the new top with zero filled high bits as I expected
+	*it shift the current stack top,and take the origin lower word place
+	*in this case, stack was
+	top
+	0x00000028
+	...
+	bottom
+After push ax (ax restores 0xfa)
+	top
+	0x002800fa
+	...
+	bottom
+	*That's the most wierd thing I've ever met
+	*The solution to that bug is, always push a big enough register.On 32-bit,you should push eax.That will do. 

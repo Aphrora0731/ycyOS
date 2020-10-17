@@ -1,13 +1,12 @@
+;kernal.asm
 BITS 32
-
-extern Cprint
 extern ycyOS
-
+;extern init_sys
 
 section .text
 global _start
-global print
-global clear_screen
+;global print
+;global clear_screen
 _start:
 mov ax,0x10
 mov ds,ax
@@ -15,63 +14,82 @@ mov ds,ax
 mov ax,0x20
 mov ss,ax
 
+xor esp,esp
+mov esp,0x0800
+call setINT
+;call init_sys
+
+xor edi,edi
+
 push 0x10
 call ycyOS
 
 jmp $
 
-;print affect register EAX(return),ECX,GS
-print:
-push ebp
-mov ebp,esp
-push edi
-xor edi,edi
-push esi
+;setIntHandler
+;set8259A
+setINT:
+mov ax,0x0028
+mov es,ax
+
 xor esi,esi
-
-;virtual memory start
-mov eax,0x0018
-mov gs,eax
-
-mov ebx,[ebp+8]
-;char* mark
-mov ecx,[ebp+12]
-;int len
-
-;local loop
-.loop:
-	mov byte al,[ebx+esi]
-	mov byte [gs:edi],al
-	inc edi
-	mov byte [gs:edi],0x0D
-	inc edi
-	inc esi
-	loop .loop	
-
-					;mov byte [gs:0x06],'M'
-					;mov byte [gs:0x07],0x0D
-pop esi
-pop edi
-
-leave
-ret
-
-clear_screen:
-push ebp
-mov ebp,esp
-
-push edi
 xor edi,edi
-mov eax,0x0018
-mov gs,eax
+mov esi,0x2800
 
-mov ecx,0x7fff
+xor ecx,ecx
+mov ecx,0x1400
 
 .loop:
-	mov byte [gs:edi],0x00
-	inc edi	
-	loop .loop
-pop edi
+mov byte ah,[si]
+mov byte [es:di],ah
+inc si
+inc di
 
-leave
+loop .loop
+
+
+;initialise 8259A
+;ICW1
+;edge trigger
+;ICW4 required
+;more than 1 8259A
+mov al,0x11
+out 0x20,al
+;out 0xa0,al
+
+;ICW2
+;intel keep 0-31 int themself
+;therefore we replace hardware interrupt from 32-47
+;which is 0x20->0x2f,0b00100xxx->0b00101xxx
+;xxx will be automatically filled,we only need to specify the start address
+mov al,0x20
+out 0x21,al
+;mov al,0x28
+;out 0xa1,al
+
+;ICW3
+;set priority
+mov al,0x04
+out 0x21,al
+;mov al,0x02
+;out 0xa1,al
+
+;ICW4
+mov al,0x01
+out 0x21,al
+;out 0xa1,al
+
+;slave 8259A
+mov al,0x11 ;ICW1
+out 0xa0,al
+mov al,0x28 ;ICW2
+out 0xa1,al
+mov al,0x02 ;ICW3
+out 0xa1,al
+mov al,0x01 ;ICW4
+out 0xa1,al 
+
+mov al,0xFD
+out 0x21,al
+
 ret

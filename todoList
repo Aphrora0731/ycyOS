@@ -1,2 +1,16 @@
 1.set a stack segment in GDT(with selector=0x20)
 2.pass parameters by stack to call C function
+
+check
+
+3.High address can't be re-written
+
+check 
+//intel saved some address which can't access
+
+4.write keyboard driver.
+	4.1
+	   put common instruction of ISR into one function,calling paticular ISRby passing arguments.
+	4.2
+	   create a keyboard buffer in memory,where keyboard ISR put scan code,and C function read scan code
+
