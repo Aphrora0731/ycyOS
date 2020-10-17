@@ -63,4 +63,16 @@ After push ax (ax restores 0xfa)
 	...
 	bottom
 	*That's the most wierd thing I've ever met
-	*The solution to that bug is, always push a big enough register.On 32-bit,you should push eax.That will do. 
+	*The solution to that bug is, always push a big enough register.On 32-bit,you should push eax.That will do.
+
+A PROBLEM ABOUT OFFSET WITH RESPECT TO SS OR DS:
+	*When using stack to pass pointer parameters, the compiler passes the offset with respect to SS
+	*However,when program actually using this parameter, it consider the offset as with respect to DS
+	*My solution is un-natural but simple.With consideration that ds base is 0x0000 and ss base is 0x7000.I just add the difference in assembly code.
+	*It's wierd and may have a repurcussion when passing and using happens just in Compiler-generated C code.
+	*The instance could be found in the implementation of assembly function print
+
+ABOUT LINGKNG:
+	*Well, I don't know how that worked.BUt array char printable_ch[] has two instance. If I delete one interrupt.o, then undefined reference occurred. SHIT
+
+

@@ -50,4 +50,28 @@ kernal.asm
 * get argument from ycyOS.c by stack
 * The actual string is stored in .rodata segment,make sure it's copied by objcopy.
 
+2020/10/17
+Makefile
+*The input sector is not big enough anymore, with repurcussion that .data section wasn'tput in ysyOS.img.Maked it bigger.
+*Linking problem
+*gcc has a stack protection, which I've never met or used.Simply turn it of by -fno-stack-protector.
+
+asmdriver.asm
+*Included function as follows:
+	print (notice the the char* argument on stack was offset with respect to ss and the actually used is with respect to ds.So I add 0x7000 to make it correct
+	init_sys (set IDT and int_handlers which are included by macros.
+
+int_handler.asm
+*This file is %include by asmdriver.asm.
+*This file called C function kb_int to manipulate keyboard buffer defined in interrupt.h
+
+loader.asm
+*Change the base of some global descriptors(for ds and cs) from 0x8800 to 0x0000.
+*This trick could fool the ld.We specified the start address of .text in 0x8800.
+*In linking stage,all address is virtual.The value is offset with respect to 0x00.
+*But when it runs in our naked machine,the phisical address of a variable is DS base + offset.
+*if we use the acquiescent configuration in linux,which means .text start at about 0x80480000 or 0x4000000,depends on 32-bit or 64-bit
+and a variable has offset 0x1000 with respect to .text section. It's virtual address is 0x1000 + 0x8048000.
+When it runs in naked machine,it's phisical adress is its offset to .text + base of .text + DS_base.
+If we want the address remains same in naked machine,we need to wipe out the DS_base part,which means set DS base to zero.
 
