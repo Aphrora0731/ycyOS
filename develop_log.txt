@@ -75,4 +75,11 @@ A PROBLEM ABOUT OFFSET WITH RESPECT TO SS OR DS:
 ABOUT LINGKNG:
 	*Well, I don't know how that worked.BUt array char printable_ch[] has two instance. If I delete one interrupt.o, then undefined reference occurred. SHIT
 
+ABOUT KEYBOARD SCAN CODE:
+	*I am so so confused why the key 'Z' and 'Y' exchanged their scan code.
+	*But I fixed it by simply change them in printable_ch[] anyway.
+
+ABOUT ASSEMBLY FUNCTION PRINT:
+	*I implement a basice print format control in that function by passing third parameter which represents the position in vedio memory of charactor to print.
+	*Should add another paramter in function Cprint to designate the start point by (x,y),and figure out present argument pos by f(x,).
 
