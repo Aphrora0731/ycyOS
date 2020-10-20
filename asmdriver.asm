@@ -30,8 +30,10 @@ mov ebx,[ebp+8]
 ;the offset of string with respect to ss regiester
 ;to get the offset with respect to ds,add the difference between ds and ss
 ;which is 0x7000-0x0000
-add ebx,0x7000
+;add ebx,0x7000
 mov ecx,[ebp+12]
+mov edi,[ebp+16]
+shl edi,1
 ;int len
 
 ;local loop

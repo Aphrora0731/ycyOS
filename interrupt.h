@@ -5,16 +5,18 @@
 #define LEFTCONTROL 0x1d
 #define LEFTSHIFT 0x2a
 #define RIGHTSHIFT 0x36
+
+#define PRINTABLE_NUM sizeof(printable_ch)/sizeof(char)
 //scan code should be an array of string
 //return value of kb_int(asm) is the offset
 //put scan_code[return_value] into KB_BUFF
 static char printable_ch[] = {
 	' ',' ','1','2','3','4','5','6','7','8',
 	'9','0','-','=','\b','\t',
-	'Q','W','E','R','T','Y','U','I','O','P',
+	'Q','W','E','R','T','Z','U','I','O','P',
 	'[',']','\r',' ','A','S',
 	'D','F','G','H','J','K','L',';','\'','`',
-	' ','\\','Z','X','C','V',
+	' ','\\','Y','X','C','V',
 	'B','N','M',',','.'
 };
 

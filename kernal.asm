@@ -15,7 +15,8 @@ mov ax,0x20
 mov ss,ax
 
 xor esp,esp
-mov esp,0x0800
+mov esp,0x7000
+mov ebp,esp
 call setINT
 ;call init_sys
 

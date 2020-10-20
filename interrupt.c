@@ -16,7 +16,8 @@ int provoke_int(int int_number)
 	    :
 	    :
 	   );
-	asm("int $0x21");
+	asm("hlt");
+	//asm("int $0x21");
 
 	asm("movb $0x20,%%al;"
 	    "out %%al,$0x20;"
