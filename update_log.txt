@@ -87,3 +87,7 @@ ycyOS.c
 *implement a better Cprint with two paramter x,y,which designate the start row and column of string.
 
 implement process
+
+2020/10/21
+ycyOS.c
+*implement a better Cprint with two postion arguments.

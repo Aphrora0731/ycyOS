@@ -82,4 +82,5 @@ ABOUT KEYBOARD SCAN CODE:
 ABOUT ASSEMBLY FUNCTION PRINT:
 	*I implement a basice print format control in that function by passing third parameter which represents the position in vedio memory of charactor to print.
 	*Should add another paramter in function Cprint to designate the start point by (x,y),and figure out present argument pos by f(x,).
-
+	*function above is implemented.80 charactor per line.Therefore the pos=col + 80*row
+	*pos is argument of assembly print,col and row is argument of Cprint
