@@ -14,3 +14,10 @@ check
 	4.2
 	   create a keyboard buffer in memory,where keyboard ISR put scan code,and C function read scan code
 
+
+5.implement a better process schedule.
+	4.1
+		A list of process instead of a single int variable esp
+	4.2
+		Adress manage of process instead of force point to stack top
+

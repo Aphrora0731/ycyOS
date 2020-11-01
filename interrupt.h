@@ -7,6 +7,9 @@
 #define RIGHTSHIFT 0x36
 
 #define PRINTABLE_NUM sizeof(printable_ch)/sizeof(char)
+
+static int switch_condition = 0;//temporary condition for clk_int() test
+static int old_esp = 0x12345678;
 //scan code should be an array of string
 //return value of kb_int(asm) is the offset
 //put scan_code[return_value] into KB_BUFF
@@ -43,6 +46,21 @@ char KBF_rear();
 
 
 int provoke_int(int int_number);
-int init_KB_Table();
+//int init_KB_Table();
 void kb_int(char scan_code);
 char read_ch();
+
+
+struct TSS
+{
+	int pre_task,esp0,ss0,esp1,ss1,esp2,ss2;
+	int cr3;
+	int eip,eflags,eax,ecx,edx,ebx,esp,ebp,esi,edi;
+	int es,cs,ss,ds,fs,gs;
+	int ldtr,iomap;
+};
+int create_process(int (*proc)());
+int clk_int();
+
+
+

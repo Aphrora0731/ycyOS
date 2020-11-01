@@ -91,3 +91,14 @@ implement process
 2020/10/21
 ycyOS.c
 *implement a better Cprint with two postion arguments.
+
+2020/11/01
+A demo of process switch
+interrupt.h(c)
+*create_process():accept a function pointer,create a stack frame for the function,which allows OS to switch from kernel to process
+
+clk_int()
+*accept an esp,store it and return the old esp
+*this function is the key point of clk interrupt and task switch.
+*It should save the old process stack frame,and decide which task to run next.
+

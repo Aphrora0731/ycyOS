@@ -27,27 +27,9 @@ call ycyOS
 
 jmp $
 
-;setIntHandler
+
 ;set8259A
 setINT:
-mov ax,0x0028
-mov es,ax
-
-xor esi,esi
-xor edi,edi
-mov esi,0x2800
-
-xor ecx,ecx
-mov ecx,0x1400
-
-.loop:
-mov byte ah,[si]
-mov byte [es:di],ah
-inc si
-inc di
-
-loop .loop
-
 
 ;initialise 8259A
 ;ICW1

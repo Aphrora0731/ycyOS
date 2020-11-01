@@ -41,7 +41,23 @@ ABOUT interrupt
 	*File interrupt.h declare interrupt function.
 	 When user calling an intehandler(keyboard intterrupt,for example),kb_int() should enbble keyboard int by programming 8259a.
 	 Then waiting assembly function for keyboard,get a scancode,transform it into ascii and put it into keyboard buffer
-	
+	*When an int happened,CPU automatically do following job:
+		1.get int number
+		2.push flag register
+		3.cli
+		4.push CS register
+		5.push IP register
+		6.Jump to interrupt handler
+	 Conversely,when instruction IRET is executed,CPU automatically do the following:
+		1.pop IP
+		2.pop CS
+		3.pop flags
+	Therfore,if we could manipulate the interrupt stack(esp,actually)
+	we could let interrupt return to wherever we want.
+	And that's how we implement process switch at present.(TSS is another way,but let's do a demo first)
+	*It's important to make sure that every register pushed on stack is correct.
+	For example,when executing create_process(),the IF bit might be cleared(because it's executed in kernel)
+	If we push that flag in stack,when process is ressusscated by iret,IF is cleard as well.So I closed pushf with an STI-CLI pair.	
 
 ABOUT KEYBOARD INTERRUPT
 	*C keyboard-int handler provokes an int and manage keyboard input buffer

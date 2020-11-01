@@ -92,11 +92,23 @@ init_sys:
 push ebp
 mov ebp,esp
 
+push ebx
 ;call init_data
 ;address of int_handler,2th parameter
 ;question is
 ;how to produce an interrupt descriptor based on parameter in eax
 ;and put it into appropriate position
+
+lea eax,[int_20h];store int_21h address in eax
+mov ebx,0 ;store idt base in ebx(0x00)
+
+mov dword [ebx+0x20*8],eax
+mov dword [ebx+0x20*8+4],eax
+;theoratically,21th Int Descriptor should be OFFSET|OFFSET
+;by changing type and seg selector afterwards,we get a right descriptor
+mov word [ebx+0x20*8+4],0x8e00
+mov word [ebx+0x20*8+2],0x0008
+
 
 lea eax,[int_21h];store int_21h address in eax
 mov ebx,0 ;store idt base in ebx(0x00)
@@ -107,7 +119,7 @@ mov dword [ebx+0x21*8+4],eax
 ;by changing type and seg selector afterwards,we get a right descriptor
 mov word [ebx+0x21*8+4],0x8e00
 mov word [ebx+0x21*8+2],0x0008
-
+pop ebx
 
 leave
 ret
