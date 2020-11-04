@@ -17,7 +17,7 @@ Chernal:kernal.o ycyOS.o interrupt.o asmdriver.o
 kernal.o:kernal.asm
 	@nasm -f elf32 -o kernal.o kernal.asm
 
-ycyOS.o:ycyOS.c interrupt.o
+ycyOS.o:ycyOS.c
 	@gcc -m32 -o ycyOS.o -c ycyOS.c -g -fno-stack-protector
 
 interrupt.o:interrupt.c
@@ -26,8 +26,8 @@ interrupt.o:interrupt.c
 asmdriver.o:asmdriver.asm int_handler.o
 	@nasm -f elf32 -o asmdriver.o asmdriver.asm
 
-mycyOS.o:ycyOS.o asmdriver.o interrupt.o
-	ld -m elf_i386 -static -o mycyOS.o interrutp.o ycyOS.o asmdriver.o --entry ycyOS -r 
+mycyOS.o:ycyOS.o asmdriver.o 
+	ld -m elf_i386 -static -o mycyOS.o ycyOS.o asmdriver.o --entry ycyOS -r 
 
 int_handler.o:int_handler.asm
 	@nasm -f elf32 -o int_handler.o int_handler.asm

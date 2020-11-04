@@ -8,12 +8,12 @@
 
 #define PRINTABLE_NUM sizeof(printable_ch)/sizeof(char)
 
-static int switch_condition = 0;//temporary condition for clk_int() test
-static int old_esp = 0x12345678;
+int switch_condition = 0;//temporary condition for clk_int() test
+int old_esp = 0x12345678;
 //scan code should be an array of string
 //return value of kb_int(asm) is the offset
 //put scan_code[return_value] into KB_BUFF
-static char printable_ch[] = {
+char printable_ch[] = {
 	' ',' ','1','2','3','4','5','6','7','8',
 	'9','0','-','=','\b','\t',
 	'Q','W','E','R','T','Z','U','I','O','P',
@@ -31,7 +31,7 @@ static char printable_ch[] = {
  *which restores those charactor just input but not been handled
  * 
  */
-static struct KeyboardBuffer
+struct KeyboardBuffer
 {
 	char buffer[KB_SIZE];
 	int front;//Next charactor to handle

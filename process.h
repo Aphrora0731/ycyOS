@@ -25,6 +25,14 @@ struct Context
 	int ebp;
 }
 */
+struct TSS
+{
+	int pre_link,esp0,ss0,esp1,ss1,esp2,ss2,cr3;
+	int eip,eflags,eax,ecx,edx,ebx,esp,ebp,esi,edi;
+	int es,cs,ss,ds,fs,gs;
+	int ldtr,iomap;
+}task_state = {};
+
 unsigned int exist_process = 0;
 struct Process
 {

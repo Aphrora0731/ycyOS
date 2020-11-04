@@ -1,5 +1,3 @@
-#include "interrupt.h"
-//#include "process.h"
 
 extern int print(char *str,int len,int pos);
 

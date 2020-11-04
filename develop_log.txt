@@ -90,6 +90,10 @@ A PROBLEM ABOUT OFFSET WITH RESPECT TO SS OR DS:
 
 ABOUT LINGKNG:
 	*Well, I don't know how that worked.BUt array char printable_ch[] has two instance. If I delete one interrupt.o, then undefined reference occurred. SHIT
+	#Now it works as we want.The point is to delete #include "interrupt.h"instruction. 
+	#Although we did not explicitly declare function in interrupt.h such as enable_clk(),ld will help us to link it.
+	#If we include head file which defines variables,it creates an instance in main file.And linking will confront two exactly same instance, and ld will raise a multiple def error.
+
 
 ABOUT KEYBOARD SCAN CODE:
 	*I am so so confused why the key 'Z' and 'Y' exchanged their scan code.
