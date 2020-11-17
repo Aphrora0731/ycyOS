@@ -21,3 +21,5 @@ check
 	4.2
 		Adress manage of process instead of force point to stack top
 
+6.A bug result by struct array sys_page[SYS_PAGE_NUM],which takes about 1Mb to indexes whole memory space.For now I temporarily delete a member to save space 
+and change the size of array so it won't take so much space but cant index the whole memory space.

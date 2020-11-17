@@ -11,7 +11,8 @@ Makefile
 *path of .img file has been assigned in this file.
  It will be automaticaly put in related bochs file.
  Check bochs' initialise file to know more
-
+*use variables to generate source file for Chernel.o
+*All trash is mv to file trash_file 
 
 2020/8/13
 bootsect(original mbr file)
@@ -102,3 +103,25 @@ clk_int()
 *this function is the key point of clk interrupt and task switch.
 *It should save the old process stack frame,and decide which task to run next.
 
+
+2020/11/17
+Enable page
+asmdriver.asm
+*init_sys:add code about setting page directory and enable page.tested.
+ for kernel's directory,its 1st PDE is a fully used page table,which indexes first 4M memory.
+ last 2M is for page tables,which manage the allocation of all 2G memory.
+ Just before it is page directory for kernel as mentioned above.
+
+memory.h(c):
+ The design idea of this file is tricky.
+Considering that sizeof(int) gives 4,exactly match the PDE and PTE,we use int to store PDE and PTE.
+To check if an entry is present,just check its bit 0(present bit)by mod 2.
+And I offer fucntion isUsed as an API.
+sys_page was designed to record used page at first,but its too big.
+So it is now simply an int* points to the start of page tables(equals 2M to be precise)
+*void* create_mm(int page_num):allocates pages from system memory space.
+return a pointer points to start of page directory,this directory maps page tables which really manage the allocated sub-memory space.
+It orderly search available pages(in sys_page[SYS_PAGE_NUM]),first two pages are for directory and first page table.
+
+ycystd.h
+*realise set_GDT function

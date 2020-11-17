@@ -104,3 +104,76 @@ ABOUT ASSEMBLY FUNCTION PRINT:
 	*Should add another paramter in function Cprint to designate the start point by (x,y),and figure out present argument pos by f(x,).
 	*function above is implemented.80 charactor per line.Therefore the pos=col + 80*row
 	*pos is argument of assembly print,col and row is argument of Cprint
+
+
+ABOUT PAGING:
+	*There are two mode of page with respect to two page size.
+	1.Each page with 4Mbyte without multi-level page.
+	2.Each page with 4Kbyte with two level paging.(Page directory first,then page table)
+	*After thorough thinking,I decide to enable page with 4 Kbyte size for following reason:
+	1.I want all process have an exactly same virtual space start at 0.If each page is 4Mbyte and we only have one page table shared by all process,it can't be done and it's meaningless to enable page.
+	2.A page table will use 4Mbyte in 4Mbyte-size page,which stores 1M pages for each process(if we use a 4Mbyte page),it's over-big for our machine
+	3.Linux uses 4Kbyte page.
+	*Now let's think about page directory and page table instance in memory.
+	 
+	 One page directory has 1024 PDE,4 bytes each,representing a page table.
+	 Each page table has 1024 PTE represents a 4 KB page.So ONE page directory maps 4GB memory space.(1024*1024*4KB = 4GB)
+	 And there are 1024 page tables in total which requires 4Mbytes in memory to store itself.(1024*4KB==4GB)
+	 
+	 First of all we need to set up a page helps to reference kernel.
+	 All user process shares a same kernel space,which means they have an exactly same page table that references to same virtual space.
+	 For now our Chernal module is about 0x2880(12KB) big,possessing more than 4 pages.
+	 Remember to save enough space(which means initlise as much as enough page table entries in page table referenced by first PDE.
+Now here's another question
+Where is the page table of user process?
+
+
+ABOUT PROCESS SWITCH:
+	*A question is:if the scheduled process has normally executed the last instruction return,where will the system return to?
+	*We switch process by faking stack and save the real stack.
+	If we did not CALL the process at all, how could it RETURN? 
+	How a process tell the kernel it has been done?
+
+	A possible solution might be explicitly JMP an instruction in kernel(or push that instruction in stack as return point of all user process),and let that instruction CALL the main function.
+	(Linux uses the exactly same method as I designed,what a proud!)
+	
+	So when faking stacks,we need to push return point as well.
+	But another question raised,which stack,kernel or user?
+	The ret instruction is no different with other user instruction.
+	Therefore,it should be push on user stack.But a user stack could return to kernel looks wierd.
+	It seems that Linux will execute exit() implicitly or explicitly.That system call will tell kernel process is dead and handle everythign.
+
+
+ABOUT PROCESS LIFETIME:
+	*When kernel recieves a request of creating process,before actual create,kernel should prepare:
+	1.memory space for process execution.
+	2.first instruction to be called.
+	3.user stack and kernel stack(esp0 and esp1)
+	4.A process struct instance contains all information above.
+	When the process actually starts,kernel CALL the first instruction,whichwill maintain a stack frame for its return.(return 0 from main function)
+	When the process finished itself,which means the process return 0 to call point(kernel),kernel executes a serial instruction to recover process's resource.
+
+		|
+   		|resource allocation
+		|
+  KERNEL	|instatiate process
+INSTRUCTION	|
+		|enqueue PCB
+		|
+		|CALL first instruction
+-----------------------------------------
+   		|scheduled in clk_int
+     USER	|
+PROCESS RUNNING	|process context switch 
+		|
+		|return 0 to call point
+		|
+-----------------------------------------
+   KERNEL	|
+INSTRUCTION	|recover resources
+		|
+
+Precisely,we need to:
+1.Allocate memory page,by creating page directory and page table for process.
+2.Instatiate a struct Process(PCB).
+

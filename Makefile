@@ -1,8 +1,16 @@
-ycyOS.img:bootsect loader Chernal 
+home_path = /home/ycy/Learn/ComputerScience/OperatingSystem/
+work_path = /home/ycy/Learn/ComputerScience/OperatingSystem/bochs-2.6.11
+trash_file = /home/ycy/Learn/ComputerScience/OperatingSystem/trash_file
+
+kernel_source = kernal.o ycyOS.o interrupt.o asmdriver.o process.o memory.o
+trash =$(kernel_source) Chernal.o Chernal
+
+img:bootsect loader Chernal 
 	@dd if=bootsect of=ycyOS.img bs=512 count=1 conv=notrunc
 	@dd if=loader of=ycyOS.img bs=512 count=4 seek=1 conv=notrunc
 	@dd if=Chernal of=ycyOS.img bs=512 count=40 seek=5 conv=notrunc
-	@mv ycyOS.img /home/ycy/Learn/ComputerScience/OperatingSystem/bochs-2.6.11
+	@mv ycyOS.img $(work_path)
+	@mv $(trash) $(trash_file)
 	
 bootsect:bootsect.asm
 	@nasm -f bin bootsect.asm
@@ -10,8 +18,8 @@ bootsect:bootsect.asm
 loader:loader.asm
 	@nasm -f bin loader.asm
 
-Chernal:kernal.o ycyOS.o interrupt.o asmdriver.o
-	ld -lc -m elf_i386 -o Chernal.o kernal.o ycyOS.o interrupt.o asmdriver.o -static -Ttext 0x8800 
+Chernal:$(kernel_source)
+	ld -lc -m elf_i386 -o Chernal.o $(kernel_source) -static -Ttext 0x8800 
 	objcopy -O binary -j .text -j .rodata -j .int20h -j .int21h -j .data Chernal.o Chernal
 
 kernal.o:kernal.asm
@@ -23,6 +31,12 @@ ycyOS.o:ycyOS.c
 interrupt.o:interrupt.c
 	@gcc -m32 -o interrupt.o -c interrupt.c -g
 
+process.o:process.c
+	@gcc -m32 -o process.o -c process.c -g
+
+memory.o:memory.c
+	@gcc -m32 -o memory.o -c memory.c -g
+
 asmdriver.o:asmdriver.asm int_handler.o
 	@nasm -f elf32 -o asmdriver.o asmdriver.asm
 
@@ -32,9 +46,10 @@ mycyOS.o:ycyOS.o asmdriver.o
 int_handler.o:int_handler.asm
 	@nasm -f elf32 -o int_handler.o int_handler.asm
 
+
 .phony:run
 
-run:ycyOS.img
+run:img
 	@make clean
 	@bochs -f ../bochs-2.6.11/bochsrc.txt -q
 	

@@ -1,0 +1,55 @@
+Q1:Is the address of page directory a phisical or virtual address?
+That question decides whether or not we need to put PD page in PT
+
+And I seem to forget put kernel space in my page tables,damn
+
+Q2:What's the relationship between theese data structure?
+A2:
+Page is a logical data struct to tell kernel which space has been used.
+We use int type to represent PDE ant PTE,so two init function returns an int
+
+page_directory is the base of a page.So it's a pointer.
+But it's also the start of PDE's array,to use index like 
+	page_directory[i]
+it's first defined as an int*,and forcely cast to void* before return.
+
+Q3:What's our user process's virtual memory space?
+Before answering that question,read more about Linux user memory space.
+
+|		|
+|     USER	|
+|		|
+|		|
+|_______________|
+|		|
+|    process	|indexes the kernel
+| kernel stack  |same for all process
+|_______________|
+|		|
+|  process	|
+|    info	|kernel stack is here
+|  and process	|
+|   kernel	|
+|    data	|
+|_______________|
+|		|
+|    kernel	|same for all process
+|    space	|
+|_______________|
+
+
+In phisical space,first 4M is saved for kernel.
+In kernel,one page directory(512 entries actually used) indexes the whole 2G memory.
+Therefore,513 pages is needed to index the whole memory,which consists:1.One page(4KB) for page directory.
+2.512 page(2M) for 512 page table referenced by 512 PDE in page directory.
+In total,we need 2M+4K bytes in kernel for management of whole memory.
+Our kernel maps as follows:
+
+|kernel code	|	      !	|PT0		|	   PT511|
+			       ^
+			   page directory
+			    (1 page,4 KB)
+
+
+
+

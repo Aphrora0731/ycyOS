@@ -83,40 +83,6 @@ char read_ch()
 	return ch_out();
 }
 
-
-int create_process(int (*proc)())
-{
-	//cannot simply leave context on stack by pushing
-	//which will ruin the stack frame
-	//cause function cannot get proper return address
-	//I think it's better to create another stack frame
-	asm(
-		"mov %%esp,%%esi;"	
-		"mov $0x6000,%%esp;"
-		"sti;"
-		"pushf;"
-		"cli;"
-		"push  $0x8;"
-		"push %0;"
-		"pusha"
-		 :
-		 :"m"(proc)
-	   );//should save eflags cs selector and eip of proc
-	asm(
-		"mov %%esp,%0"
-		:"=r"(old_esp)
-		:
-	   );//save esp for switch to
-	asm(
-		"mov %%esi,%%esp"
-		:
-		:
-	   );
-	return 0;
-
-	//proc();
-}
-
 //most process schedule happened here
 //accept present eps as argument
 //before entering function body,switch to kernal stack

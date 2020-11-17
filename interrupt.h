@@ -46,20 +46,11 @@ char KBF_rear();
 
 
 int provoke_int(int int_number);
-//int init_KB_Table();
+
 void kb_int(char scan_code);
 char read_ch();
 
 
-struct TSS
-{
-	int pre_task,esp0,ss0,esp1,ss1,esp2,ss2;
-	int cr3;
-	int eip,eflags,eax,ecx,edx,ebx,esp,ebp,esi,edi;
-	int es,cs,ss,ds,fs,gs;
-	int ldtr,iomap;
-};
-int create_process(int (*proc)());
 int clk_int();
 
 

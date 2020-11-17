@@ -3,7 +3,7 @@
 
 extern void clear_screen();
 extern void init_sys();
-
+extern task_state;
 int proc1()
 {
 	//print a line,determine system are running the process
@@ -25,15 +25,24 @@ int proc2()
 void ycyOS(int status)
 {	
 	clear_screen();
+
+	//set IDT
+	//enable page
+	//init system page directory and page table
 	init_sys();
 
-	create_process(proc1);
-	enable_clk();
+	//init_memory();
+
+	//set tast descriptor
+	//shared by all process
+	setGDT(7,&task_state,104,0x8b,1);
+
+	//create_process(proc1);
+	//enable_clk();
 	//create_process defined in interrupt.h
 	//instantiate in interrupt.c
 	//create_process(proc1);
-	proc2();
-	while(1){}	
+	
 	//create_process(proc2);
 	/*
 	 * print module test
